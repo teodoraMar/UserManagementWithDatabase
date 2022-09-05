@@ -29,7 +29,7 @@ public class User {
     private String username;
     @NotBlank
     @Column
-    private String name;
+    private String handle;
     @Column
     private String surname;
     @Column

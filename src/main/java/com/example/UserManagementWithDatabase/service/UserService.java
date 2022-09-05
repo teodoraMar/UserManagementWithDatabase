@@ -13,7 +13,11 @@ import java.util.Optional;
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
 
     public User createUser(User user){
@@ -28,14 +32,26 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User updateUser(User userToUpdate, int id){
-        User user=null;
-        Optional<User> optionalUser=userRepository.findById(id);
+    public User getUserByHandle(String handle){
+        List<User> users=userRepository.findAll();
+        User newUser=null;
+        for (User user : users) {
+            if (user.getHandle().equals(handle)) {
+                newUser = user;
+
+            }
+        }
+        return newUser;
+    }
+
+    public User updateUserByHandle(User userToUpdate, String handle){
+        User user;
+        Optional<User> optionalUser=userRepository.findByHandle(handle);
         if(optionalUser.isPresent()){
             user=optionalUser.get();
             userToUpdate.setUsername(user.getUsername());
             userToUpdate.setEmail(user.getEmail());
-            userToUpdate.setName(user.getName());
+            userToUpdate.setHandle(user.getHandle());
             userToUpdate.setSurname(user.getSurname());
             userToUpdate.setCountry(user.getCountry());
             userToUpdate.setCity(user.getCity());
@@ -45,5 +61,21 @@ public class UserService {
         return userToUpdate;
 
     }
+    public User updateUser(User userToUpdate, int id){
+        User user;
+        Optional<User> optionalUser=userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            user=optionalUser.get();
+            userToUpdate.setUsername(user.getUsername());
+            userToUpdate.setEmail(user.getEmail());
+            userToUpdate.setHandle(user.getHandle());
+            userToUpdate.setSurname(user.getSurname());
+            userToUpdate.setCountry(user.getCountry());
+            userToUpdate.setCity(user.getCity());
+        } else{
+            return new User();
+        }
+        return userToUpdate;
 
+    }
 }

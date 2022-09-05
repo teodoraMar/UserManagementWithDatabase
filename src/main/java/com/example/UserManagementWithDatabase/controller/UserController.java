@@ -6,6 +6,7 @@ import com.example.UserManagementWithDatabase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
@@ -13,7 +14,11 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private final  UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
 
     @PostMapping
@@ -27,6 +32,11 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+   //@GetMapping("user/{handle}")
+   // public User getUserByHandle(@PathVariable String handle){
+      //  return userService.getUserByHandle(handle);
+    //}
+
     @GetMapping("/users")
     public List<User> getAllUsers(){
         return userService.getUsers();
@@ -35,6 +45,14 @@ public class UserController {
 
     @PutMapping(path="{id}")
     public User updateUser(@RequestBody User userToUpdate,@PathVariable("id") int id){
+
         return userService.updateUser(userToUpdate,id);
     }
+
+    //@PutMapping(path="{handle}")
+    //public User updateUserByHandle(@RequestBody User userToUpdate,@PathVariable("handle") String handle){
+
+    // return userService.updateUser(userToUpdate,handle);
+    // }
+
 }
