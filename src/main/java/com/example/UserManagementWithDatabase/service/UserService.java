@@ -1,6 +1,7 @@
 package com.example.UserManagementWithDatabase.service;
 
 
+import com.example.UserManagementWithDatabase.dao.PostRepository;
 import com.example.UserManagementWithDatabase.dao.UserRepository;
 import com.example.UserManagementWithDatabase.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,12 @@ public class UserService {
     @Autowired
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    @Autowired
+    private final PostRepository postRepository;
+
+    public UserService(UserRepository userRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
     }
 
 
@@ -78,4 +83,6 @@ public class UserService {
         return userToUpdate;
 
     }
+
+
 }

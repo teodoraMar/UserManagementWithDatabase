@@ -1,6 +1,7 @@
 package com.example.UserManagementWithDatabase.model;
 
 
+import com.example.UserManagementWithDatabase.model.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -9,13 +10,14 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Entity
-@Table
+@Table(name="users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +38,7 @@ public class User {
     private String country;
     @Column
     private String city;
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts;
 }
