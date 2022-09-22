@@ -25,21 +25,21 @@ public class UserService {
     }
 
 
-    public User createUser(User user){
+    public User createUser(User user) {
         return userRepository.save(user);
     }
 
-    public User getUserById(int id){
+    public User getUserById(int id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         return userRepository.findAll();
     }
 
-    public User getUserByHandle(String handle){
-        List<User> users=userRepository.findAll();
-        User newUser=null;
+    public User getUserByHandle(String handle) {
+        List<User> users = userRepository.findAll();
+        User newUser = null;
         for (User user : users) {
             if (user.getHandle().equals(handle)) {
                 newUser = user;
@@ -49,35 +49,36 @@ public class UserService {
         return newUser;
     }
 
-    public User updateUserByHandle(User userToUpdate, String handle){
+    public User updateUserByHandle(User userToUpdate, String handle) {
         User user;
-        Optional<User> optionalUser=userRepository.findByHandle(handle);
-        if(optionalUser.isPresent()){
-            user=optionalUser.get();
+        Optional<User> optionalUser = userRepository.findByHandle(handle);
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
             userToUpdate.setUsername(user.getUsername());
             userToUpdate.setEmail(user.getEmail());
             userToUpdate.setHandle(user.getHandle());
             userToUpdate.setSurname(user.getSurname());
             userToUpdate.setCountry(user.getCountry());
             userToUpdate.setCity(user.getCity());
-        } else{
+        } else {
             return new User();
         }
         return userToUpdate;
 
     }
-    public User updateUser(User userToUpdate, int id){
+
+    public User updateUser(User userToUpdate, int id) {
         User user;
-        Optional<User> optionalUser=userRepository.findById(id);
-        if(optionalUser.isPresent()){
-            user=optionalUser.get();
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
             userToUpdate.setUsername(user.getUsername());
             userToUpdate.setEmail(user.getEmail());
             userToUpdate.setHandle(user.getHandle());
             userToUpdate.setSurname(user.getSurname());
             userToUpdate.setCountry(user.getCountry());
             userToUpdate.setCity(user.getCity());
-        } else{
+        } else {
             return new User();
         }
         return userToUpdate;

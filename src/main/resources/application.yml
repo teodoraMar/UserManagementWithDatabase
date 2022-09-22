@@ -1,6 +1,24 @@
 spring:
+
+  jpa:
+    hibernate:
+      ddl-auto: none
   datasource:
     url: jdbc:mysql://localhost:3306/baza
     username: root
     password: pass
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  sql:
+    init: continue-on-error
+
+  flyway:
+    enabled: true
+
+
+
+
+
+
+
+
