@@ -23,7 +23,7 @@ public class Post {
 
 
     @Column
-    @NotBlank
+
     private Integer user;
 
 

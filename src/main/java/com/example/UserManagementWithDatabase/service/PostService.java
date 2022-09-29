@@ -37,7 +37,7 @@ public class PostService {
     }
 
 
-    public int voteUp(Post postToUpdate, int id) {
+    public int voteUp( int id) {
         Post post;
         Optional<Post> optionalPost = postRepository.findById(id);
         if (optionalPost.isPresent()) {
@@ -48,6 +48,8 @@ public class PostService {
             //counter++;
 
             // post.setVoteCounter(counter);
+            post.setUpVote(upVote);
+            postRepository.save(post);
             return upVote;
 
 
@@ -59,7 +61,7 @@ public class PostService {
 
     }
 
-    public int voteDown(Post postToUpdate, int id) {
+    public int voteDown(int id) {
         Post post;
         Optional<Post> optionalPost = postRepository.findById(id);
         if (optionalPost.isPresent()) {
@@ -71,6 +73,7 @@ public class PostService {
 
             //post.setVoteCounter(counter);
             post.setDownVote(downVote);
+            postRepository.save(post);
             return downVote;
 
 

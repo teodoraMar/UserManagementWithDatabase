@@ -6,6 +6,8 @@ import com.example.UserManagementWithDatabase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/post")
 public class PostController {
@@ -29,16 +31,19 @@ public class PostController {
         return postService.savePost(post);
 
     }
-
+   @GetMapping("/posts/{id}")
+   public List<Post> getPosts(@PathVariable int id ){
+       return postService.getPostsOfUser(id);
+   }
 
     @PutMapping(path = "{id}/voteUp")
-    public int voteUp(@RequestBody Post post, @PathVariable int id) {
-        return postService.voteUp(post, id);
+    public int voteUp(@PathVariable int id) {
+        return postService.voteUp( id);
     }
 
     @PutMapping(path = "{id}/voteDown")
-    public int voteDown(@RequestBody Post post, @PathVariable int id) {
-        return postService.voteDown(post, id);
+    public int voteDown( @PathVariable int id) {
+        return postService.voteDown( id);
     }
 
 
