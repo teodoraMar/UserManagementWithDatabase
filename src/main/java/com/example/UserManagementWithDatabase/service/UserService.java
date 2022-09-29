@@ -72,16 +72,17 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             user = optionalUser.get();
-            userToUpdate.setUsername(user.getUsername());
-            userToUpdate.setEmail(user.getEmail());
-            userToUpdate.setHandle(user.getHandle());
-            userToUpdate.setSurname(user.getSurname());
-            userToUpdate.setCountry(user.getCountry());
-            userToUpdate.setCity(user.getCity());
+            user.setUsername(userToUpdate.getUsername());
+            user.setEmail(userToUpdate.getEmail());
+            user.setHandle(userToUpdate.getHandle());
+            user.setSurname(userToUpdate.getSurname());
+            user.setCountry(userToUpdate.getCountry());
+            user.setCity(userToUpdate.getCity());
+            userRepository.save(user);
         } else {
             return new User();
         }
-        return userToUpdate;
+        return user;
 
     }
 

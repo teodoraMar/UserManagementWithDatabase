@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping(value="/api/user")
 public class UserController {
 
     @Autowired
@@ -26,29 +26,30 @@ public class UserController {
 
     }
 
-    @GetMapping("/user/{id}")
-    public User getUserById(@PathVariable int id) {
+    @GetMapping("/{id}")
+    public User getUserById( @PathVariable int id) {
         return userService.getUserById(id);
     }
 
-    //@GetMapping("user/{handle}")
-    // public User getUserByHandle(@PathVariable String handle){
-    //  return userService.getUserByHandle(handle);
-    //}
+    @GetMapping("/user/{handle}")
+    public User getUserByHandle(@PathVariable String handle){
+    return userService.getUserByHandle(handle);
+    }
 
-    @GetMapping("/users")
+    @GetMapping(value="/users")
     public List<User> getAllUsers() {
         return userService.getUsers();
 
     }
 
-    @PutMapping(path = "{id}")
-    public User updateUser(@RequestBody User userToUpdate, @PathVariable("id") int id) {
+    @PutMapping( "/update/{id}")
+    public User  updateUser(@RequestBody User userToUpdate, @PathVariable("id") int id) {
 
         return userService.updateUser(userToUpdate, id);
     }
 
-    //@PutMapping(path="{handle}")
+
+    // @PutMapping(path="{handle}")
     //public User updateUserByHandle(@RequestBody User userToUpdate,@PathVariable("handle") String handle){
 
     // return userService.updateUser(userToUpdate,handle);

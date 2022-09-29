@@ -45,9 +45,9 @@ public class Post {
     private Tags tags;
 
 
-    @Column(name = "up_vote")
+    @Column(name = "upvote")
     private int upVote;
-    @Column(name = "down_vote")
+    @Column(name = "downvote")
     private int downVote;
     //private int voteCounter;
 }
