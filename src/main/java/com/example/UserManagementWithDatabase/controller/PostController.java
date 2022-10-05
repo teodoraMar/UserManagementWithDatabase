@@ -36,6 +36,12 @@ public class PostController {
        return postService.getPostsOfUser(id);
    }
 
+    @PutMapping( "/update/{id}")
+    public Post updatePost(@RequestBody Post postToUpdate, @PathVariable("id") int id) {
+
+        return postService.updatePost(postToUpdate, id);
+    }
+
     @PutMapping(path = "{id}/voteUp")
     public int voteUp(@PathVariable int id) {
         return postService.voteUp( id);

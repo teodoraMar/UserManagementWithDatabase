@@ -38,6 +38,26 @@ public class PostService {
 
     }
 
+    public Post updatePost(Post postToUpdate, int id) {
+        Post post;
+        Optional<Post> optionalPost = postRepository.findById(id);
+        if (optionalPost.isPresent()) {
+            post = optionalPost.get();
+            post.setDescription(postToUpdate.getDescription());
+            post.setTitle(postToUpdate.getTitle());
+            post.setGeolocation(postToUpdate.getGeolocation());
+            post.setTags(postToUpdate.getTags());
+
+            LocalDateTime modified=  LocalDateTime.now();
+            post.setModifiedOn(modified);
+            postRepository.save(post);
+        } else {
+            return new Post();
+        }
+        return post;
+
+    }
+
 
     public int voteUp( int id) {
         Post post;
