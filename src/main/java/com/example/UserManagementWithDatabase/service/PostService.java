@@ -7,6 +7,7 @@ import com.example.UserManagementWithDatabase.model.post.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +24,8 @@ public class PostService {
 
 
     public Post savePost(Post post) {
-
+        LocalDateTime created=  LocalDateTime.now();
+        post.setCreatedOn(created);
 
         return postRepository.save(post);
     }
