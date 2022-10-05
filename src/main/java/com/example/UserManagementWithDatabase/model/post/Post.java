@@ -1,6 +1,7 @@
 package com.example.UserManagementWithDatabase.model.post;
 
 
+import com.example.UserManagementWithDatabase.model.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table(name = "post")
 
-public class Post {
+public class Post extends BaseEntity {
 
 
     @Id
