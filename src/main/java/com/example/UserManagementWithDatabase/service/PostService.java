@@ -7,6 +7,7 @@ import com.example.UserManagementWithDatabase.model.post.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +60,8 @@ public class PostService {
     }
 
 
+
+    @Transactional
     public int voteUp( int id) {
         Post post;
         Optional<Post> optionalPost = postRepository.findById(id);
@@ -83,6 +86,7 @@ public class PostService {
 
     }
 
+    @Transactional
     public int voteDown(int id) {
         Post post;
         Optional<Post> optionalPost = postRepository.findById(id);
