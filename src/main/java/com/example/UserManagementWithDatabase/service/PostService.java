@@ -1,8 +1,8 @@
 package com.example.UserManagementWithDatabase.service;
 
+import com.example.UserManagementWithDatabase.custom.exception.BusinessException;
 import com.example.UserManagementWithDatabase.dao.PostRepository;
 import com.example.UserManagementWithDatabase.dao.UserRepository;
-import com.example.UserManagementWithDatabase.model.User;
 import com.example.UserManagementWithDatabase.model.post.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,19 +25,39 @@ public class PostService {
 
 
     public Post savePost(Post post) {
-        LocalDateTime created=  LocalDateTime.now();
-        post.setCreatedOn(created);
 
-        return postRepository.save(post);
+        if (userRepository.findById(post.getUser()).isEmpty()) {
+            throw new BusinessException("601", "Oops!User does not exist in the database, cannot save post!");
+        }
+        try {
+            LocalDateTime created = LocalDateTime.now();
+            post.setCreatedOn(created);
+
+            return postRepository.save(post);
+        } catch (Exception e) {
+            throw new BusinessException("602", "Something went wrong in the service layer" + e.getMessage());
+        }
     }
 
     public List<Post> getPostsOfUser(int userId) {
-        Optional<User> user = userRepository.findById(userId);
+        if(userRepository.findById(userId).isEmpty())
+            throw new BusinessException("605","Post list is empty! Nothing to show, because user does not exist!") ;
+        try{
 
 
-        return user.get().getPosts();
+
+
+
+
+            List<Post> posts=userRepository.findById(userId).get().getPosts();
+            return posts;
+        }catch (Exception e){
+            throw new BusinessException("606","Something went wrong in the service layer while fetching for all posts"+e.getMessage());
+        }
 
     }
+
+
 
     public Post updatePost(Post postToUpdate, int id) {
         Post post;

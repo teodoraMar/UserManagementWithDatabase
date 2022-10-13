@@ -1,9 +1,13 @@
 package com.example.UserManagementWithDatabase.controller;
 
+import com.example.UserManagementWithDatabase.custom.exception.BusinessException;
+import com.example.UserManagementWithDatabase.custom.exception.ControllerException;
 import com.example.UserManagementWithDatabase.model.post.Post;
 import com.example.UserManagementWithDatabase.service.PostService;
 import com.example.UserManagementWithDatabase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,13 +31,40 @@ public class PostController {
 
 
     @PostMapping
-    public Post addPost(@RequestBody Post post) {
-        return postService.savePost(post);
+    public ResponseEntity<?> addPost(@RequestBody Post post) {
+        {
+            try {
+                Post postSaved = postService.savePost(post);
+                return new ResponseEntity<Post>(postSaved, HttpStatus.CREATED);
+            }catch(BusinessException e){
+                ControllerException ce = new ControllerException(e.getErrorCode(),e.getErrorMessage());
+                return new ResponseEntity<ControllerException>(ce, HttpStatus.BAD_REQUEST);
+            }catch(Exception e){
+                ControllerException ce = new ControllerException("611","Something went wrong in the control layer");
+                return new ResponseEntity<ControllerException>(ce, HttpStatus.BAD_REQUEST);
+            }
+
+        }
+
 
     }
    @GetMapping("/posts/{id}")
-   public List<Post> getPosts(@PathVariable int id ){
-       return postService.getPostsOfUser(id);
+   public ResponseEntity<?> getPosts(@PathVariable int id ){
+        try{
+       List<Post> posts=postService.getPostsOfUser(id);
+       return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
+
+   }catch(BusinessException e){
+       ControllerException ce = new ControllerException(e.getErrorCode(),e.getErrorMessage());
+       return new ResponseEntity<ControllerException>(ce, HttpStatus.BAD_REQUEST);
+
+   }catch(Exception e){
+       ControllerException ce = new ControllerException("612","Something went wrong in the control layer");
+       return new ResponseEntity<ControllerException>(ce, HttpStatus.BAD_REQUEST);
+
+   }
+
+
    }
 
     @PutMapping( "/update/{id}")

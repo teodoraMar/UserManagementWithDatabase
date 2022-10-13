@@ -1,6 +1,7 @@
 package com.example.UserManagementWithDatabase.service;
 
 
+import com.example.UserManagementWithDatabase.custom.exception.BusinessException;
 import com.example.UserManagementWithDatabase.dao.PostRepository;
 import com.example.UserManagementWithDatabase.dao.UserRepository;
 import com.example.UserManagementWithDatabase.model.User;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -27,30 +29,56 @@ public class UserService {
 
 
     public User createUser(User user) {
+        if (userRepository.findByHandle(user.getHandle()).isPresent()) {
+            throw new BusinessException("601", "Oops!User already exists in the database");
+        }
+            try {
+                LocalDateTime created = LocalDateTime.now();
+                user.setCreatedOn(created);
+                return userRepository.save(user);
 
-       LocalDateTime created=  LocalDateTime.now();
-       user.setCreatedOn(created);
-        return userRepository.save(user);
+
+            } catch (Exception e) {
+
+
+                throw new BusinessException("602", "Something went wrong in the service layer" + e.getMessage());
+            }
+
+        }
+
+    public User getUserById(int id)  {
+        try {
+            User user = userRepository.findById(id).get();
+            if (user.getId()<1) throw new BusinessException("603", "User does not exist");
+            return user;
+        }
+        catch (NoSuchElementException e) {
+            throw new BusinessException("604","User with given id does not exist in the database");
+        }
     }
 
-    public User getUserById(int id) {
-        return userRepository.findById(id).orElse(null);
-    }
 
     public List<User> getUsers() {
-        return userRepository.findAll();
+        try{
+            List<User> userList=userRepository.findAll();
+            if(userList.isEmpty())
+                throw new BusinessException("605","User list is empty, nothing to show") ;
+            return userList;
+        }catch (Exception e){
+               throw new BusinessException("606","Something went wrong in the service layer while fetching for all posts"+e.getMessage());
+        }
+
     }
 
     public User getUserByHandle(String handle) {
-        List<User> users = userRepository.findAll();
-        User newUser = null;
-        for (User user : users) {
-            if (user.getHandle().equals(handle)) {
-                newUser = user;
-
-            }
+        try {
+            User user = userRepository.findByHandle(handle).get();
+            if (user.getHandle().isEmpty()) throw new BusinessException("607", "User does not exist");
+            return user;
         }
-        return newUser;
+        catch (NoSuchElementException e) {
+            throw new BusinessException("608","User with given handle does not exist in the database");
+        }
     }
 
     public User updateUserByHandle(User userToUpdate, String handle) {
