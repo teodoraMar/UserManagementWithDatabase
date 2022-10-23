@@ -3,6 +3,7 @@ package com.example.UserManagementWithDatabase.controller;
 
 import com.example.UserManagementWithDatabase.custom.exception.BusinessException;
 import com.example.UserManagementWithDatabase.custom.exception.ControllerException;
+import com.example.UserManagementWithDatabase.model.Factory.UserFactory;
 import com.example.UserManagementWithDatabase.model.User;
 import com.example.UserManagementWithDatabase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,11 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    @Autowired
+    private final UserFactory userFactory;
+    public UserController(UserService userService, UserFactory userFactory) {
         this.userService = userService;
+        this.userFactory = userFactory;
     }
 
 
@@ -37,6 +41,11 @@ public class UserController {
             return new ResponseEntity<ControllerException>(ce, HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @PostMapping("/{handle}/{email}/{username}/{surname}")
+    public User createUser( @PathVariable String handle,@PathVariable String email,@PathVariable String username,@PathVariable String surname){
+       return userFactory.createUser(handle,email,username,surname);
     }
 
     @GetMapping("/{id}")

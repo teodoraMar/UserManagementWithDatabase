@@ -68,13 +68,13 @@ public class PostController {
    }
 
     @PutMapping( "/update/{id}")
-    public Post updatePost(@RequestBody Post postToUpdate, @PathVariable("id") int id) {
+    public Post updatePost(@RequestBody Post postToUpdate, @PathVariable("id") int id)  {
 
         return postService.updatePost(postToUpdate, id);
     }
 
     @PutMapping(path = "{id}/voteUp")
-    public int voteUp(@PathVariable int id) {
+    public int voteUp(@PathVariable int id)  {
         return postService.voteUp( id);
     }
 

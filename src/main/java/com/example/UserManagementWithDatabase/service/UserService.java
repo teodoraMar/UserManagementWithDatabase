@@ -84,6 +84,8 @@ public class UserService {
     public User updateUserByHandle(User userToUpdate, String handle) {
         User user;
         Optional<User> optionalUser = userRepository.findByHandle(handle);
+        Optional.ofNullable(optionalUser).orElseThrow(()-> new IllegalArgumentException("Invalid user, handle is invalid"));
+
         if (optionalUser.isPresent()) {
             user = optionalUser.get();
             userToUpdate.setUsername(user.getUsername());
@@ -101,9 +103,9 @@ public class UserService {
 
     public User updateUser(User userToUpdate, int id) {
         User user;
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            user = optionalUser.get();
+        User optionalUser = userRepository.findById(id).orElseThrow(()->new NoSuchElementException("No user found, ID does not exist in database"));
+
+            user = optionalUser;
             user.setUsername(userToUpdate.getUsername());
             user.setEmail(userToUpdate.getEmail());
             user.setHandle(userToUpdate.getHandle());
@@ -114,9 +116,7 @@ public class UserService {
             LocalDateTime modified=  LocalDateTime.now();
             user.setModifiedOn(modified);
             userRepository.save(user);
-        } else {
-            return new User();
-        }
+
         return user;
 
     }

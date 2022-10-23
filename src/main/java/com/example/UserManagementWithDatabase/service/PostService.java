@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -59,10 +60,12 @@ public class PostService {
 
 
 
-    public Post updatePost(Post postToUpdate, int id) {
+    public Post updatePost (Post postToUpdate, int id)  {
         Post post;
         Optional<Post> optionalPost = postRepository.findById(id);
-        if (optionalPost.isPresent()) {
+        if(optionalPost.isEmpty()) throw new IllegalArgumentException("Post does not exist");
+
+
             post = optionalPost.get();
             post.setDescription(postToUpdate.getDescription());
             post.setTitle(postToUpdate.getTitle());
@@ -72,9 +75,7 @@ public class PostService {
             LocalDateTime modified=  LocalDateTime.now();
             post.setModifiedOn(modified);
             postRepository.save(post);
-        } else {
-            return new Post();
-        }
+
         return post;
 
     }
@@ -85,7 +86,7 @@ public class PostService {
     public int voteUp( int id) {
         Post post;
         Optional<Post> optionalPost = postRepository.findById(id);
-        if (optionalPost.isPresent()) {
+        if (optionalPost.isEmpty())throw new NoSuchElementException("Invalid post") ;
             post = optionalPost.get();
             int upVote = post.getUpVote();
             // int counter = post.getVoteCounter();
@@ -98,10 +99,7 @@ public class PostService {
             return upVote;
 
 
-        } else {
 
-            return 0;
-        }
 
 
     }
@@ -110,26 +108,21 @@ public class PostService {
     public int voteDown(int id) {
         Post post;
         Optional<Post> optionalPost = postRepository.findById(id);
-        if (optionalPost.isPresent()) {
-            post = optionalPost.get();
-            int downVote = post.getDownVote();
+        if (optionalPost.isEmpty()) throw new NoSuchElementException("Invalid post");
+        post = optionalPost.get();
+        int downVote = post.getDownVote();
 
-            downVote++;
-
-
-            //post.setVoteCounter(counter);
-            post.setDownVote(downVote);
-            postRepository.save(post);
-            return downVote;
+        downVote++;
 
 
-        } else {
-
-            return 0;
-        }
+        //post.setVoteCounter(counter);
+        post.setDownVote(downVote);
+        postRepository.save(post);
+        return downVote;
 
 
     }
+
 
 
 }
