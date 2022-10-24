@@ -36,11 +36,11 @@ public class PostController {
             try {
                 Post postSaved = postService.savePost(post);
                 return new ResponseEntity<Post>(postSaved, HttpStatus.CREATED);
-            }catch(BusinessException e){
-                ControllerException ce = new ControllerException(e.getErrorCode(),e.getErrorMessage());
+            } catch (BusinessException e) {
+                ControllerException ce = new ControllerException(e.getErrorCode(), e.getErrorMessage());
                 return new ResponseEntity<ControllerException>(ce, HttpStatus.BAD_REQUEST);
-            }catch(Exception e){
-                ControllerException ce = new ControllerException("611","Something went wrong in the control layer");
+            } catch (Exception e) {
+                ControllerException ce = new ControllerException("611", "Something went wrong in the control layer");
                 return new ResponseEntity<ControllerException>(ce, HttpStatus.BAD_REQUEST);
             }
 
@@ -48,39 +48,40 @@ public class PostController {
 
 
     }
-   @GetMapping("/posts/{id}")
-   public ResponseEntity<?> getPosts(@PathVariable int id ){
-        try{
-       List<Post> posts=postService.getPostsOfUser(id);
-       return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
 
-   }catch(BusinessException e){
-       ControllerException ce = new ControllerException(e.getErrorCode(),e.getErrorMessage());
-       return new ResponseEntity<ControllerException>(ce, HttpStatus.BAD_REQUEST);
+    @GetMapping("/posts/{id}")
+    public ResponseEntity<?> getPosts(@PathVariable int id) {
+        try {
+            List<Post> posts = postService.getPostsOfUser(id);
+            return new ResponseEntity<List<Post>>(posts, HttpStatus.OK);
 
-   }catch(Exception e){
-       ControllerException ce = new ControllerException("612","Something went wrong in the control layer");
-       return new ResponseEntity<ControllerException>(ce, HttpStatus.BAD_REQUEST);
+        } catch (BusinessException e) {
+            ControllerException ce = new ControllerException(e.getErrorCode(), e.getErrorMessage());
+            return new ResponseEntity<ControllerException>(ce, HttpStatus.BAD_REQUEST);
 
-   }
+        } catch (Exception e) {
+            ControllerException ce = new ControllerException("612", "Something went wrong in the control layer");
+            return new ResponseEntity<ControllerException>(ce, HttpStatus.BAD_REQUEST);
+
+        }
 
 
-   }
+    }
 
-    @PutMapping( "/update/{id}")
-    public Post updatePost(@RequestBody Post postToUpdate, @PathVariable("id") int id)  {
+    @PutMapping("/update/{id}")
+    public Post updatePost(@RequestBody Post postToUpdate, @PathVariable("id") int id) {
 
         return postService.updatePost(postToUpdate, id);
     }
 
     @PutMapping(path = "{id}/voteUp")
-    public int voteUp(@PathVariable int id)  {
-        return postService.voteUp( id);
+    public int voteUp(@PathVariable int id) {
+        return postService.voteUp(id);
     }
 
     @PutMapping(path = "{id}/voteDown")
-    public int voteDown( @PathVariable int id) {
-        return postService.voteDown( id);
+    public int voteDown(@PathVariable int id) {
+        return postService.voteDown(id);
     }
 
 

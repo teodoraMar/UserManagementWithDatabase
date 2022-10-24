@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -19,7 +18,7 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "user")
-@Component
+
 public class User extends BaseEntity {
 
     @Id
