@@ -1,14 +1,11 @@
 package com.example.UserManagementWithDatabase.model.Factory;
 
 import com.example.UserManagementWithDatabase.model.User;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-@Data
-@AllArgsConstructor
+
 @Component
 public class UserFactory {
 

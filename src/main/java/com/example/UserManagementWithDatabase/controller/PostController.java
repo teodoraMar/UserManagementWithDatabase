@@ -2,6 +2,7 @@ package com.example.UserManagementWithDatabase.controller;
 
 import com.example.UserManagementWithDatabase.custom.exception.BusinessException;
 import com.example.UserManagementWithDatabase.custom.exception.ControllerException;
+import com.example.UserManagementWithDatabase.model.PostDTO;
 import com.example.UserManagementWithDatabase.model.post.Post;
 import com.example.UserManagementWithDatabase.service.PostService;
 import com.example.UserManagementWithDatabase.service.UserService;
@@ -31,10 +32,10 @@ public class PostController {
 
 
     @PostMapping
-    public ResponseEntity<?> addPost(@RequestBody Post post) {
+    public ResponseEntity<?> addPost(@RequestBody PostDTO postDTO) {
         {
             try {
-                Post postSaved = postService.savePost(post);
+                Post postSaved = postService.savePost(postService.convertDTOToEntity(postDTO));
                 return new ResponseEntity<Post>(postSaved, HttpStatus.CREATED);
             } catch (BusinessException e) {
                 ControllerException ce = new ControllerException(e.getErrorCode(), e.getErrorMessage());
@@ -47,6 +48,17 @@ public class PostController {
         }
 
 
+    }
+
+    @PostMapping("/factory")
+    @ResponseBody
+    public Post createPost(@RequestParam String description, @RequestParam String title, @RequestParam String geolocation, @RequestParam int user) {
+        return postService.createPostWithFactory(description, title, geolocation, user);
+    }
+
+    @PostMapping("/geolocation")
+    public void setGeolocation(@RequestParam long lon, @RequestParam long lat) {
+        postService.setGeolocation(lon, lat);
     }
 
     @GetMapping("/posts/{id}")

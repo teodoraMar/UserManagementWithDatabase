@@ -6,13 +6,14 @@ import com.example.UserManagementWithDatabase.dao.PostRepository;
 import com.example.UserManagementWithDatabase.dao.UserRepository;
 import com.example.UserManagementWithDatabase.model.Factory.UserFactory;
 import com.example.UserManagementWithDatabase.model.User;
+import com.example.UserManagementWithDatabase.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
+
 
 @Service
 public class UserService {
@@ -50,7 +51,7 @@ public class UserService {
     }
 
     public User createUserWithFactory(String handle, String email, String username, String surname) {
-        UserFactory userFactory = new UserFactory();
+
         User user = UserFactory.createUser(handle, email, username, surname);
         userRepository.save(user);
         return user;
@@ -89,25 +90,6 @@ public class UserService {
         }
     }
 
-    public User updateUserByHandle(User userToUpdate, String handle) {
-        User user;
-        Optional<User> optionalUser = userRepository.findByHandle(handle);
-        Optional.ofNullable(optionalUser).orElseThrow(() -> new IllegalArgumentException("Invalid user, handle is invalid"));
-
-        if (optionalUser.isPresent()) {
-            user = optionalUser.get();
-            userToUpdate.setUsername(user.getUsername());
-            userToUpdate.setEmail(user.getEmail());
-            userToUpdate.setHandle(user.getHandle());
-            userToUpdate.setSurname(user.getSurname());
-            userToUpdate.setCountry(user.getCountry());
-            userToUpdate.setCity(user.getCity());
-        } else {
-            return new User();
-        }
-        return userToUpdate;
-
-    }
 
     public User updateUser(User userToUpdate, int id) {
         User user;
@@ -127,6 +109,24 @@ public class UserService {
 
         return user;
 
+    }
+
+    public UserDTO convertEntityToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail(user.getEmail());
+        userDTO.setHandle(user.getHandle());
+        userDTO.setSurname(user.getSurname());
+        userDTO.setUsername(user.getUsername());
+        return userDTO;
+    }
+
+    public User convertDTOToEntity(UserDTO userDTO) {
+        User user = new User();
+        user.setSurname(userDTO.getSurname());
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        user.setHandle(userDTO.getHandle());
+        return user;
     }
 
 

@@ -1,10 +1,13 @@
 package com.example.UserManagementWithDatabase.util;
 
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.lang.constant.Constable;
+
 public class JsonUtil {
-    public static String objectToJson(Object object) {
+    public static Constable objectToJson(Object object) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.writeValueAsString(object);

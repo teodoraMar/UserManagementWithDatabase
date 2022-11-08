@@ -5,6 +5,7 @@ import com.example.UserManagementWithDatabase.custom.exception.BusinessException
 import com.example.UserManagementWithDatabase.custom.exception.ControllerException;
 import com.example.UserManagementWithDatabase.model.Factory.UserFactory;
 import com.example.UserManagementWithDatabase.model.User;
+import com.example.UserManagementWithDatabase.model.UserDTO;
 import com.example.UserManagementWithDatabase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,18 +22,19 @@ public class UserController {
     private final UserService userService;
 
 
-    private final UserFactory userFactory;
+
 
     public UserController(UserService userService, UserFactory userFactory) {
         this.userService = userService;
-        this.userFactory = userFactory;
+
     }
 
 
     @PostMapping
-    public ResponseEntity<?> addUser(@RequestBody User user) {
+    public ResponseEntity<?> addUser(@RequestBody UserDTO userDTO) {
         try {
-            User userSaved = userService.createUser(user);
+            User userSaved = userService.createUser(userService.convertDTOToEntity(userDTO));
+
             return new ResponseEntity<User>(userSaved, HttpStatus.CREATED);
         } catch (BusinessException e) {
             ControllerException ce = new ControllerException(e.getErrorCode(), e.getErrorMessage());
@@ -47,6 +49,7 @@ public class UserController {
     @PostMapping("/factory")
     @ResponseBody
     public User createUser(@RequestParam String handle, @RequestParam String email, @RequestParam String username, @RequestParam String surname) {
+        UserFactory userFactory = new UserFactory();
         return userService.createUserWithFactory(handle, email, username, surname);
     }
 
@@ -110,11 +113,5 @@ public class UserController {
         return userService.updateUser(userToUpdate, id);
     }
 
-
-    // @PutMapping(path="{handle}")
-    //public User updateUserByHandle(@RequestBody User userToUpdate,@PathVariable("handle") String handle){
-
-    // return userService.updateUser(userToUpdate,handle);
-    // }
 
 }

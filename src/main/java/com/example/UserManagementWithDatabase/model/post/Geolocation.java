@@ -1,13 +1,14 @@
 package com.example.UserManagementWithDatabase.model.post;
 
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+
 public class Geolocation {
 
 
