@@ -50,16 +50,6 @@ public class PostController {
 
     }
 
-    @PostMapping("/factory")
-    @ResponseBody
-    public Post createPost(@RequestParam String description, @RequestParam String title, @RequestParam String geolocation, @RequestParam int user) {
-        return postService.createPostWithFactory(description, title, geolocation, user);
-    }
-
-    @PostMapping("/geolocation")
-    public void setGeolocation(@RequestParam long lon, @RequestParam long lat) {
-        postService.setGeolocation(lon, lat);
-    }
 
     @GetMapping("/posts/{id}")
     public ResponseEntity<?> getPosts(@PathVariable int id) {
@@ -78,6 +68,12 @@ public class PostController {
         }
 
 
+    }
+
+    @PutMapping("/{id}/geolocation")
+    public ResponseEntity<?> updateGeolocation(@PathVariable("id") int id, int lon, int lat) {
+        postService.updateGeolocation(id, lon, lat);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")

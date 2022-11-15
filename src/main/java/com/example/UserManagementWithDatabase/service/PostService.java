@@ -5,9 +5,7 @@ import com.example.UserManagementWithDatabase.dao.PostRepository;
 import com.example.UserManagementWithDatabase.dao.UserRepository;
 import com.example.UserManagementWithDatabase.model.Factory.PostFactory;
 import com.example.UserManagementWithDatabase.model.PostDTO;
-import com.example.UserManagementWithDatabase.model.post.Geolocation;
 import com.example.UserManagementWithDatabase.model.post.Post;
-import com.example.UserManagementWithDatabase.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostService {
     private String geolocation;
-    private JsonUtil jsonUtil;
+
 
     private final PostRepository postRepository;
 
@@ -46,12 +44,16 @@ public class PostService {
         }
     }
 
-    public Post createPostWithFactory(String description, String title, String geolocation, int user) {
-        Post post = PostFactory.createPost(description, title, geolocation, user);
+    public Post savePost(PostDTO dto) {
+        Post post = PostFactory.createPost(dto.getDescription(), dto.getTitle(), dto.getGeolocation(), dto.getUser());
+        LocalDateTime created = LocalDateTime.now();
+        post.setCreatedOn(created);
+
+
         postRepository.save(post);
         return post;
-
     }
+
 
     public List<Post> getPostsOfUser(int userId) {
         if (userRepository.findById(userId).isEmpty())
@@ -88,6 +90,10 @@ public class PostService {
 
     }
 
+    public void updateGeolocation(Integer postId, long lon, long lat) {
+        Post post = postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
+        post.setGeolocation(lon, lat);
+    }
 
     @Transactional
     public int voteUp(int id) {
@@ -127,17 +133,10 @@ public class PostService {
 
     }
 
-    public PostDTO convertEntityToDTO(Post post) {
-        PostDTO postDTO = new PostDTO();
-
-        postDTO.setDescription(post.getDescription());
-        postDTO.setGeolocation(post.getGeolocation());
-        postDTO.setTags(post.getTags());
-        return postDTO;
-    }
 
     public Post convertDTOToEntity(PostDTO postDTO) {
         Post post = new Post();
+
         post.setDescription(postDTO.getDescription());
         post.setTags(postDTO.getTags());
         post.setTitle(postDTO.getTitle());
@@ -146,14 +145,7 @@ public class PostService {
     }
 
 
-    public void setGeolocation(long lon, long lat) {
-        this.geolocation = String.valueOf(JsonUtil.objectToJson(geolocation));
-    }
 
-
-    public Geolocation getGeolocation(Class<Geolocation> geolocationClass) {
-        return (Geolocation) JsonUtil.fromJson(geolocation, geolocationClass);
-    }
 
 
 }

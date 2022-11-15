@@ -2,6 +2,7 @@ package com.example.UserManagementWithDatabase.model.post;
 
 
 import com.example.UserManagementWithDatabase.model.BaseEntity;
+import com.example.UserManagementWithDatabase.util.JsonUtil;
 import lombok.*;
 
 import javax.persistence.*;
@@ -50,5 +51,13 @@ public class Post extends BaseEntity {
     private int upVote;
     @Column(name = "downvote")
     private int downVote;
-    //private int voteCounter;
+
+    public void setGeolocation(long lon, long lat) {
+        this.geolocation = String.valueOf(JsonUtil.objectToJson(geolocation));
+    }
+
+
+    public Geolocation getGeolocation(Class<Geolocation> geolocationClass) {
+        return (Geolocation) JsonUtil.fromJson(geolocation, geolocationClass);
+    }
 }

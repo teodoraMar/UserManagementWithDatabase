@@ -6,7 +6,7 @@ import com.example.UserManagementWithDatabase.model.post.Post;
 import java.time.LocalDateTime;
 
 public class PostFactory {
-    public static Post createPost(String description, String title, String geolocation, int user) {
+    public static Post createPost(String description, String title, String geolocation, Integer user) {
 
 
         Post post = new Post();

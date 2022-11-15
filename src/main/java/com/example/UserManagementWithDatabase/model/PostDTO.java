@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 public class PostDTO {
 
-    private Integer id;
-    private UserDTO user;
+
+    private int user;
     private String title;
     private String geolocation;
 
